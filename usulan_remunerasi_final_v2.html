@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Usulan Kenaikan Remunerasi - Final</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
+    body { background-color: #f0f4f8; padding: 40px 20px; color: #1e293b; }
+    .container { max-width: 1100px; margin: 0 auto; display: flex; flex-direction: column; gap: 50px; }
+    
+    /* WRAPPER UNTUK SETIAP SLIDE */
+    .slide-wrapper { background: #ffffff; border-radius: 16px; padding: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); position: relative; overflow: hidden; }
+    
+    /* HEADER SLIDE */
+    .slide-header { border-bottom: 3px solid #e2e8f0; padding-bottom: 15px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: flex-end; }
+    .slide-title { font-size: 26px; font-weight: 800; color: #0f172a; }
+    .slide-subtitle { font-size: 14px; color: #64748b; font-weight: 600; margin-top: 5px; }
+    .badge { padding: 8px 18px; border-radius: 20px; font-size: 14px; font-weight: 800; color: #fff; letter-spacing: 0.5px; box-shadow: 0 4px 10px rgba(0,0,0,0.15);}
+    
+    /* TEMA WARNA */
+    .theme-neutral .badge { background: linear-gradient(135deg, #64748b, #475569); }
+    .theme-1 .badge { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+    .theme-2 .badge { background: linear-gradient(135deg, #a855f7, #6d28d9); }
+    .theme-3 .badge { background: linear-gradient(135deg, #f97316, #c2410c); }
+    .theme-4 .badge { background: linear-gradient(135deg, #10b981, #047857); }
+
+    /* KPI CARDS */
+    .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px; }
+    .kpi-card { border-radius: 12px; padding: 20px; color: #fff; display: flex; flex-direction: column; justify-content: center; box-shadow: 0 5px 15px rgba(0,0,0,0.1); position: relative; overflow: hidden; }
+    .kpi-card::after { content: ''; position: absolute; right: -10px; bottom: -10px; width: 60px; height: 60px; background: rgba(255,255,255,0.15); border-radius: 50%; }
+    
+    .bg-blue { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+    .bg-purple { background: linear-gradient(135deg, #a855f7, #7e22ce); }
+    .bg-orange { background: linear-gradient(135deg, #f97316, #ea580c); }
+    .bg-green { background: linear-gradient(135deg, #10b981, #059669); }
+    .bg-teal { background: linear-gradient(135deg, #14b8a6, #0f766e); }
+    .bg-yellow { background: linear-gradient(135deg, #f59e0b, #d97706); }
+    .bg-dark { background: linear-gradient(135deg, #334155, #1e293b); }
+    .bg-red { background: linear-gradient(135deg, #ef4444, #b91c1c); }
+
+    .kpi-card .label { font-size: 11px; text-transform: uppercase; font-weight: 700; opacity: 0.9; margin-bottom: 5px; letter-spacing: 0.5px;}
+    .kpi-card .value { font-size: 20px; font-weight: 800; margin-bottom: 5px; }
+    .kpi-card .desc { font-size: 11px; font-weight: 500; opacity: 0.8; }
+    
+    /* CHART CONTAINER */
+    .chart-container { position: relative; height: 320px; width: 100%; margin-bottom: 25px; }
+    
+    /* TABLE STYLE */
+    table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 20px; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+    th { background: #f8fafc; padding: 12px; border-bottom: 2px solid #e2e8f0; font-weight: 800; color: #1e293b; text-align: center;}
+    td { padding: 12px; border-bottom: 1px solid #e2e8f0; color: #475569; text-align: center; font-weight: 600;}
+    tr:last-child td { border-bottom: none; }
+    tr:nth-child(even) td { background: #f8fafc; }
+    
+    /* HIGHLIGHT BOX */
+    .highlight-box { background: #f8fafc; border-left: 6px solid #cbd5e1; padding: 20px; border-radius: 8px; font-size: 13.5px; line-height: 1.6; color: #475569; }
+    .theme-neutral .highlight-box { border-left-color: #64748b; background: #f1f5f9; }
+    .theme-1 .highlight-box { border-left-color: #3b82f6; background: #eff6ff; }
+    .theme-2 .highlight-box { border-left-color: #a855f7; background: #faf5ff; }
+    .theme-3 .highlight-box { border-left-color: #f97316; background: #fff7ed; }
+    .theme-4 .highlight-box { border-left-color: #10b981; background: #ecfdf5; }
+    
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: center;}
+
+    /* REASON SECTION (KHUSUS SLIDE 1) */
+    .reason-box { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+    .reason-title { font-size: 18px; font-weight: 800; color: #0f172a; margin-bottom: 15px; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; }
+    .reason-list { list-style: none; padding-left: 0; }
+    .reason-list li { position: relative; padding-left: 30px; margin-bottom: 15px; font-size: 14px; line-height: 1.6; color: #334155; text-align: justify;}
+    .reason-list li::before { content: '⚠️'; position: absolute; left: 0; top: 0; font-size: 16px; }
+    .reason-list li b { color: #0f172a; }
+
+    /* PRINT HELPER */
+    @media print { .slide-wrapper { page-break-after: always; box-shadow: none; border: 1px solid #ccc; } }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- ========================================== -->
+    <!-- SLIDE 1: JUSTIFIKASI PENYESUAIAN SM        -->
+    <!-- ========================================== -->
+    <div class="slide-wrapper theme-neutral">
+        <div class="slide-header">
+            <div>
+                <div class="slide-title">Usulan Penyesuaian Tunjangan Jabatan Senior Manager</div>
+                <div class="slide-subtitle">Kebijakan Khusus (Di luar persentase Alternatif Kenaikan)</div>
+            </div>
+            <div class="badge">JUSTIFIKASI</div>
+        </div>
+
+        <div class="grid-2" style="grid-template-columns: 1fr 1.5fr;">
+            <!-- Kiri: Tabel Usulan -->
+            <div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tunjangan Jabatan</th>
+                            <th>Sebelum</th>
+                            <th>Sesudah</th>
+                            <th>Selisih (+/-)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="background:#eff6ff;">
+                            <td><b>Senior Manager</b></td>
+                            <td>Rp 3.500.000</td>
+                            <td>Rp 4.500.000</td>
+                            <td style="color:#dc2626; font-weight:bold;">Rp 1.000.000</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="kpi-grid" style="grid-template-columns: 1fr 1fr; margin-top: 20px;">
+                    <div class="kpi-card bg-yellow">
+                        <div class="label">Cost/Bulan (20 Org)</div>
+                        <div class="value">Rp 20 Juta</div>
+                        <div class="desc">20 org x Rp 1 Juta</div>
+                    </div>
+                    <div class="kpi-card bg-red">
+                        <div class="label">Cost/Tahun</div>
+                        <div class="value">Rp 240 Juta</div>
+                        <div class="desc">Akumulasi 12 Bulan</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kanan: Alasan -->
+            <div class="reason-box">
+                <div class="reason-title">Alasan Penyesuaian (Gap Analysis)</div>
+                <ul class="reason-list">
+                    <li><b>Gap Tj. Jabatan antara Area Manager (AMR) dengan Senior Manager (SM) terlalu besar.</b> Yakni selisih <b>Rp 2,5 Juta atau 41,67%</b>. Gap ini diluar pemberian fasilitas ROP dan Biaya Operasional yang diterima AM.</li>
+                    <li><b>Gap Tj. Jabatan antara Senior Manager (SM) dan Deputy AM (DAMR) tidak memiliki perbedaan nilai.</b> Saat ini keduanya sama-sama Rp 3,5 Juta. Sehingga perlu ditinjau kembali agar ada perbedaan nilai tunjangan struktural sesuai hierarki (SM lebih tinggi dari DAMR).</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SLIDE 2: ALTERNATIF 1 (10% + SM)           -->
+    <!-- ========================================== -->
+    <div class="slide-wrapper theme-1">
+        <div class="slide-header">
+            <div>
+                <div class="slide-title">Simulasi Alternatif 1: Kenaikan 10%</div>
+                <div class="slide-subtitle">Pendekatan Pro-rata Tj. Kepangkatan & Tj. Jabatan + Penyesuaian SM</div>
+            </div>
+            <div class="badge">SKENARIO 10%</div>
+        </div>
+
+        <div class="kpi-grid">
+            <div class="kpi-card bg-blue">
+                <div class="label">Gaji Before</div>
+                <div class="value">Rp 5,13 M</div>
+            </div>
+            <div class="kpi-card bg-teal">
+                <div class="label">Kenaikan Alt. 1 (10%)</div>
+                <div class="value">Rp 220,8 Jt</div>
+            </div>
+            <div class="kpi-card bg-yellow">
+                <div class="label">Penyesuaian SM</div>
+                <div class="value">Rp 20 Jt</div>
+            </div>
+            <div class="kpi-card bg-green">
+                <div class="label">Total Tambahan (Bulan)</div>
+                <div class="value">Rp 240,8 Jt</div>
+                <div class="desc">Gaji After: Rp 5,37 M</div>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <canvas id="chartAlt1"></canvas>
+        </div>
+
+        <div class="highlight-box">
+            <b>Analisa:</b> Total tambahan beban bulanan adalah <b>Rp 240,8 Juta</b> (Termasuk SM). Skenario ini sangat ringan dan aman bagi <i>cash flow</i>, namun mungkin belum cukup optimal untuk menahan laju <i>turnover</i> di level Area Manager.
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SLIDE 3: ALTERNATIF 2 (20% + SM)           -->
+    <!-- ========================================== -->
+    <div class="slide-wrapper theme-2">
+        <div class="slide-header">
+            <div>
+                <div class="slide-title">Simulasi Alternatif 2: Kenaikan 20%</div>
+                <div class="slide-subtitle">Pendekatan Moderat (Keseimbangan Kinerja & Beban Biaya)</div>
+            </div>
+            <div class="badge">SKENARIO 20%</div>
+        </div>
+
+        <div class="kpi-grid">
+            <div class="kpi-card bg-purple">
+                <div class="label">Gaji Before</div>
+                <div class="value">Rp 5,13 M</div>
+            </div>
+            <div class="kpi-card bg-teal">
+                <div class="label">Kenaikan Alt. 2 (20%)</div>
+                <div class="value">Rp 441,6 Jt</div>
+            </div>
+            <div class="kpi-card bg-yellow">
+                <div class="label">Penyesuaian SM</div>
+                <div class="value">Rp 20 Jt</div>
+            </div>
+            <div class="kpi-card bg-green">
+                <div class="label">Total Tambahan (Bulan)</div>
+                <div class="value">Rp 461,6 Jt</div>
+                <div class="desc">Gaji After: Rp 5,60 M</div>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <canvas id="chartAlt2"></canvas>
+        </div>
+
+        <div class="highlight-box">
+            <b>Analisa:</b> Total tambahan beban bulanan adalah <b>Rp 461,6 Juta</b> (Termasuk SM). Angka ini sangat ideal, masih di bawah alokasi anggaran (Rp 700 Juta), dan memberikan kenaikan yang cukup signifikan untuk retensi pimpinan.
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SLIDE 4: ALTERNATIF 3 (30% + SM)           -->
+    <!-- ========================================== -->
+    <div class="slide-wrapper theme-3">
+        <div class="slide-header">
+            <div>
+                <div class="slide-title">Simulasi Alternatif 3: Kenaikan 30%</div>
+                <div class="slide-subtitle">Pendekatan Agresif (Fokus pada Daya Saing Ekstrem)</div>
+            </div>
+            <div class="badge">SKENARIO 30%</div>
+        </div>
+
+        <div class="kpi-grid">
+            <div class="kpi-card bg-orange">
+                <div class="label">Gaji Before</div>
+                <div class="value">Rp 5,13 M</div>
+            </div>
+            <div class="kpi-card bg-teal">
+                <div class="label">Kenaikan Alt. 3 (30%)</div>
+                <div class="value">Rp 662,4 Jt</div>
+            </div>
+            <div class="kpi-card bg-yellow">
+                <div class="label">Penyesuaian SM</div>
+                <div class="value">Rp 20 Jt</div>
+            </div>
+            <div class="kpi-card bg-green">
+                <div class="label">Total Tambahan (Bulan)</div>
+                <div class="value">Rp 682,4 Jt</div>
+                <div class="desc">Gaji After: Rp 5,82 M</div>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <canvas id="chartAlt3"></canvas>
+        </div>
+
+        <div class="highlight-box">
+            <b>Analisa:</b> Total tambahan beban bulanan adalah <b>Rp 682,4 Juta</b> (Termasuk SM). Angka ini sudah sangat mepet dengan batas maksimal alokasi anggaran dan berisiko menekan profitabilitas jika tidak diimbangi lonjakan revenue.
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SLIDE 5: ANALISA & REKOMENDASI (ALT 2)     -->
+    <!-- ========================================== -->
+    <div class="slide-wrapper theme-4">
+        <div class="slide-header">
+            <div>
+                <div class="slide-title">Rekomendasi Manajemen</div>
+                <div class="slide-subtitle">Kesimpulan Usulan Penyesuaian Remunerasi Pimpinan</div>
+            </div>
+            <div class="badge">REKOMENDASI</div>
+        </div>
+
+        <div class="highlight-box" style="margin-bottom: 30px; display: flex; gap: 20px; align-items: center; border-left-color: #10b981; background: #ecfdf5;">
+            <div style="font-size: 50px;">✅</div>
+            <div>
+                <h3 style="color:#047857; margin-bottom: 10px; font-size: 20px;">MEREKOMENDASIKAN ALTERNATIF 2 (Kenaikan 20% + Penyesuaian Tunjab SM + Rp 1 Juta)</h3>
+                <p style="font-size: 15px; font-weight: 600; color: #065f46;">Dengan Total Tambahan +/- Rp 461 Juta/bulan (Sudah termasuk penyesuaian SM).</p>
+            </div>
+        </div>
+
+        <div class="grid-2" style="grid-template-columns: 1.2fr 1fr;">
+            <!-- Kiri: Poin Alasan -->
+            <div>
+                <ul class="reason-list" style="margin-top: 10px;">
+                    <li><b>Finansial Sehat:</b> Total tambahan +/- Rp 461 Juta/bulan sangat sejalan dan masih jauh di bawah estimasi alokasi anggaran perusahaan sebesar Rp 700 Juta. <i>Cash flow</i> tetap aman.</li>
+                    <li><b>Mitigasi Risiko:</b> Kenaikan 20% ini cukup kompetitif untuk menahan laju <i>turnover</i> di level pimpinan tanpa harus mengorbankan profitabilitas perusahaan.</li>
+                    <li><b>Berkeadilan (Internal Equity):</b> Penyesuaian khusus SM sebesar Rp 1 Juta sangat krusial untuk menyeimbangkan hierarki dan menutup <i>gap</i> yang terlalu jauh antara Area Manager (AMR) dan Senior Manager (SM), serta membedakannya dengan Deputy Area Manager (DAMR).</li>
+                </ul>
+            </div>
+
+            <!-- Kanan: Grafik Perbandingan -->
+            <div>
+                <div class="chart-container" style="height: 280px;">
+                    <canvas id="chartRekomendasi"></canvas>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    // ---------------------------------------------------------
+    // PENGATURAN GLOBAL CHART
+    // ---------------------------------------------------------
+    Chart.defaults.font.family = "'Segoe UI', Arial, sans-serif";
+    Chart.defaults.color = '#64748b';
+
+    const labels = ['Gaji Before', 'Kenaikan Alt', 'Penyesuaian SM', 'Gaji After'];
+
+    // Data (Dalam Rupiah)
+    const base = 5139097815;
+    
+    const addAlt1 = 220829382;
+    const addSM = 20000000;
+    const totalAdd1 = addAlt1 + addSM;
+    const after1 = base + totalAdd1;
+
+    const addAlt2 = 441658765;
+    const totalAdd2 = addAlt2 + addSM;
+    const after2 = base + totalAdd2;
+
+    const addAlt3 = 662488147;
+    const totalAdd3 = addAlt3 + addSM;
+    const after3 = base + totalAdd3;
+
+    // Fungsi Helper untuk Membuat Grafik Batang
+    function createBarChart(canvasId, dataArray, colors) {
+        new Chart(document.getElementById(canvasId).getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Nominal (Rp)',
+                    data: dataArray,
+                    backgroundColor: colors,
+                    borderRadius: 8,
+                    borderSkipped: false,
+                    barThickness: 60
+                }]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#1e293b', padding: 12, cornerRadius: 6,
+                        callbacks: {
+                            label: function(context) { return ' Rp ' + context.parsed.y.toLocaleString('id-ID'); }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        grid: { color: '#f1f5f9', drawBorder: false },
+                        ticks: { callback: function(value) { return (value / 1000000000).toFixed(1) + ' M'; }, font: {weight: 'bold'} }
+                    },
+                    x: { grid: { display: false }, ticks: {font: {weight: 'bold'}} }
+                }
+            }
+        });
+    }
+
+    // Render Grafik Masing-masing Alternatif
+    createBarChart('chartAlt1', [base, addAlt1, addSM, after1], ['#93c5fd', '#34d399', '#fbbf24', '#f472b6']);
+    createBarChart('chartAlt2', [base, addAlt2, addSM, after2], ['#d8b4fe', '#34d399', '#fbbf24', '#f472b6']);
+    createBarChart('chartAlt3', [base, addAlt3, addSM, after3], ['#fdba74', '#34d399', '#fbbf24', '#f472b6']);
+
+    // ---------------------------------------------------------
+    // CHART UNTUK SLIDE 5 (REKOMENDASI)
+    // ---------------------------------------------------------
+    new Chart(document.getElementById('chartRekomendasi').getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels: ['Alt 1 (10%)', 'Alt 2 (20%)', 'Alt 3 (30%)'],
+            datasets: [{
+                label: 'Total Tambahan per Bulan (Rp)',
+                data: [totalAdd1, totalAdd2, totalAdd3],
+                backgroundColor: ['#3b82f6', '#a855f7', '#f97316'],
+                borderRadius: 8,
+                borderSkipped: false,
+                barThickness: 50
+            }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    backgroundColor: '#1e293b', padding: 12, cornerRadius: 6,
+                    callbacks: {
+                        label: function(context) { return ' Rp ' + context.parsed.y.toLocaleString('id-ID'); }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    grid: { color: '#f1f5f9', drawBorder: false },
+                    ticks: { callback: function(value) { return (value / 1000000) + ' Jt'; }, font: {weight: 'bold'} }
+                },
+                x: { grid: { display: false }, ticks: {font: {weight: 'bold'}} }
+            }
+        }
+    });
+</script>
+</body>
+</html>

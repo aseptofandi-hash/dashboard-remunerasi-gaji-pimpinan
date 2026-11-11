@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Rekomendasi Manajemen</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
+    body { background-color: #f0f4f8; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 40px; color: #1e293b; }
+    .slide-wrapper { background: #ffffff; border-radius: 16px; padding: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); max-width: 1000px; width: 100%; }
+    .slide-header { border-bottom: 3px solid #10b981; padding-bottom: 15px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: flex-end;}
+    .slide-title { font-size: 26px; font-weight: 800; color: #0f172a; }
+    .slide-subtitle { font-size: 14px; color: #64748b; font-weight: 600; margin-top: 5px; }
+    .badge { padding: 8px 18px; border-radius: 20px; font-size: 14px; font-weight: 800; color: #fff; background: linear-gradient(135deg, #10b981, #047857); box-shadow: 0 4px 10px rgba(0,0,0,0.15);}
+    
+    .grid-2 { display: grid; grid-template-columns: 1.2fr 1fr; gap: 30px; align-items: center; }
+
+    .rekomendasi-box { background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 12px; padding: 30px; margin-bottom: 30px; display: flex; gap: 20px; align-items: center; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.1);}
+    .rekomendasi-box .icon { font-size: 50px; }
+    .rekomendasi-box h3 { font-size: 20px; color: #047857; font-weight: 800; margin-bottom: 10px; line-height: 1.4;}
+    .rekomendasi-box p { font-size: 16px; font-weight: 600; color: #065f46; }
+
+    .reason-list { list-style: none; padding-left: 0; }
+    .reason-list li { position: relative; padding-left: 30px; margin-bottom: 20px; font-size: 14.5px; line-height: 1.6; color: #334155; text-align: justify;}
+    .reason-list li::before { content: '✅'; position: absolute; left: 0; top: 0; font-size: 16px; }
+    .reason-list li b { color: #0f172a; }
+
+    .chart-container { position: relative; height: 280px; width: 100%; }
+</style>
+</head>
+<body>
+    <div class="slide-wrapper">
+        <div class="slide-header">
+            <div>
+                <div class="slide-title">Rekomendasi Manajemen</div>
+                <div class="slide-subtitle">Kesimpulan Usulan Penyesuaian Remunerasi Pimpinan</div>
+            </div>
+            <div class="badge">REKOMENDASI</div>
+        </div>
+
+        <div class="rekomendasi-box">
+            <div class="icon">🏆</div>
+            <div>
+                <h3>MEREKOMENDASIKAN ALTERNATIF 2 (Kenaikan 20% + Penyesuaian Tunjab SM + Rp 1 Juta)</h3>
+                <p>Total Tambahan +/- Rp 461 Juta/bulan (Sudah termasuk penyesuaian SM).</p>
+            </div>
+        </div>
+
+        <div class="grid-2">
+            <div>
+                <ul class="reason-list">
+                    <li><b>Finansial Sehat:</b> Total tambahan +/- Rp 461 Juta/bulan sangat sejalan dan masih jauh di bawah estimasi alokasi anggaran perusahaan sebesar Rp 700 Juta. <i>Cash flow</i> tetap aman.</li>
+                    <li><b>Mitigasi Risiko:</b> Kenaikan 20% ini cukup kompetitif untuk menahan laju <i>turnover</i> di level pimpinan tanpa harus mengorbankan profitabilitas perusahaan.</li>
+                    <li><b>Berkeadilan (Internal Equity):</b> Penyesuaian khusus SM sebesar Rp 1 Juta sangat krusial untuk menyeimbangkan hierarki dan menutup <i>gap</i> yang terlalu jauh antara Area Manager (AMR) dan Senior Manager (SM), serta membedakannya dengan Deputy Area Manager (DAMR).</li>
+                </ul>
+            </div>
+
+            <div>
+                <div class="chart-container">
+                    <canvas id="chartRekomendasi"></canvas>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        Chart.defaults.font.family = "'Segoe UI', Arial, sans-serif";
+        const ctx = document.getElementById('chartRekomendasi').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Alt 1 (10%)', 'Alt 2 (20%)', 'Alt 3 (30%)'],
+                datasets: [{
+                    label: 'Total Tambahan per Bulan (Rp)',
+                    data: [240829382, 461658765, 682488147], // Ditambah SM
+                    backgroundColor: ['#3b82f6', '#a855f7', '#f97316'],
+                    borderRadius: 8, borderSkipped: false, barThickness: 50
+                }]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(c) { return ' Rp ' + c.parsed.y.toLocaleString('id-ID'); } } } },
+                scales: { y: { grid: { color: '#f1f5f9' }, ticks: { callback: function(v) { return (v / 1000000) + ' Jt'; }, font: {weight: 'bold'} } }, x: { grid: { display: false }, ticks: {font: {weight: 'bold'}} } }
+            }
+        });
+    </script>
+</body>
+</html>

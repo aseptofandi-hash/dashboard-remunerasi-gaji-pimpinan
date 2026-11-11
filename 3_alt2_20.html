@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Alternatif 2 - Kenaikan 20%</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
+    body { background-color: #f0f4f8; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 40px; color: #1e293b; }
+    .slide-wrapper { background: #ffffff; border-radius: 16px; padding: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); max-width: 1000px; width: 100%; }
+    .slide-header { border-bottom: 3px solid #a855f7; padding-bottom: 15px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: flex-end;}
+    .slide-title { font-size: 26px; font-weight: 800; color: #0f172a; }
+    .slide-subtitle { font-size: 14px; color: #64748b; font-weight: 600; margin-top: 5px; }
+    .badge { padding: 8px 18px; border-radius: 20px; font-size: 14px; font-weight: 800; color: #fff; background: linear-gradient(135deg, #a855f7, #6d28d9); box-shadow: 0 4px 10px rgba(0,0,0,0.15);}
+    
+    .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px; }
+    .kpi-card { border-radius: 12px; padding: 20px; color: #fff; display: flex; flex-direction: column; justify-content: center; box-shadow: 0 5px 15px rgba(0,0,0,0.1); position: relative; overflow: hidden; }
+    .kpi-card::after { content: ''; position: absolute; right: -10px; bottom: -10px; width: 60px; height: 60px; background: rgba(255,255,255,0.15); border-radius: 50%; }
+    .bg-purple { background: linear-gradient(135deg, #a855f7, #7e22ce); }
+    .bg-teal { background: linear-gradient(135deg, #14b8a6, #0f766e); }
+    .bg-yellow { background: linear-gradient(135deg, #f59e0b, #d97706); }
+    .bg-green { background: linear-gradient(135deg, #10b981, #059669); }
+    .kpi-card .label { font-size: 11px; text-transform: uppercase; font-weight: 700; opacity: 0.9; margin-bottom: 5px; }
+    .kpi-card .value { font-size: 20px; font-weight: 800; margin-bottom: 5px; }
+    .kpi-card .desc { font-size: 11px; opacity: 0.8; }
+
+    .chart-container { position: relative; height: 350px; width: 100%; margin-bottom: 25px; }
+    .highlight-box { background: #faf5ff; border-left: 6px solid #a855f7; padding: 20px; border-radius: 8px; font-size: 14px; line-height: 1.6; color: #475569; }
+</style>
+</head>
+<body>
+    <div class="slide-wrapper">
+        <div class="slide-header">
+            <div>
+                <div class="slide-title">Simulasi Alternatif 2: Kenaikan 20%</div>
+                <div class="slide-subtitle">Pendekatan Moderat (Keseimbangan Kinerja & Beban Biaya)</div>
+            </div>
+            <div class="badge">SKENARIO 20%</div>
+        </div>
+
+        <div class="kpi-grid">
+            <div class="kpi-card bg-purple">
+                <div class="label">Total Gaji (Before)</div>
+                <div class="value">Rp 5,13 M</div>
+            </div>
+            <div class="kpi-card bg-teal">
+                <div class="label">Kenaikan Tunj. (20%)</div>
+                <div class="value">Rp 441,6 Jt</div>
+            </div>
+            <div class="kpi-card bg-yellow">
+                <div class="label">Penyesuaian SM</div>
+                <div class="value">Rp 20 Jt</div>
+            </div>
+            <div class="kpi-card bg-green">
+                <div class="label">Total Gaji (After)</div>
+                <div class="value">Rp 5,60 M</div>
+                <div class="desc">+/- Rp 461,6 Jt / Bulan</div>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <canvas id="chartAlt2"></canvas>
+        </div>
+
+        <div class="highlight-box">
+            <b>Analisa:</b> Total tambahan beban bulanan adalah <b>Rp 461,6 Juta</b> (Termasuk SM). Angka ini sangat ideal, masih di bawah alokasi anggaran (Rp 700 Juta), dan memberikan kenaikan yang cukup signifikan untuk retensi pimpinan.
+        </div>
+    </div>
+
+    <script>
+        Chart.defaults.font.family = "'Segoe UI', Arial, sans-serif";
+        const ctx = document.getElementById('chartAlt2').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Gaji Before', 'Kenaikan Alt', 'Penyesuaian SM', 'Gaji After'],
+                datasets: [{
+                    data: [5139097815, 441658765, 20000000, 5600756580],
+                    backgroundColor: ['#d8b4fe', '#34d399', '#fbbf24', '#f472b6'],
+                    borderRadius: 8, borderSkipped: false, barThickness: 60
+                }]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(c) { return ' Rp ' + c.parsed.y.toLocaleString('id-ID'); } } } },
+                scales: { y: { grid: { color: '#f1f5f9' }, ticks: { callback: function(v) { return (v / 1000000000).toFixed(1) + ' M'; }, font: {weight: 'bold'} } }, x: { grid: { display: false }, ticks: {font: {weight: 'bold'}} } }
+            }
+        });
+    </script>
+</body>
+</html>

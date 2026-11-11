@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Grafik Tren Inflasi & UMP</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
+    body { background-color: #f0f4f8; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+    
+    /* CARD CONTAINER */
+    .chart-card { 
+        background: #ffffff; 
+        padding: 30px; 
+        border-radius: 16px; 
+        box-shadow: 0 15px 35px rgba(0,0,0,0.08); 
+        width: 100%; 
+        max-width: 900px; 
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* Aksen Garis di Atas */
+    .chart-card::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 6px;
+        background: linear-gradient(90deg, #3b82f6, #ef4444);
+    }
+    
+    .header { margin-bottom: 25px; text-align: center; }
+    .header h2 { font-size: 22px; font-weight: 800; color: #1e293b; letter-spacing: 0.5px; }
+    .header p { font-size: 14px; color: #64748b; margin-top: 5px; }
+
+    .canvas-container { position: relative; height: 400px; width: 100%; }
+
+    .insight-box {
+        background: #fffbeb;
+        border-left: 4px solid #f59e0b;
+        padding: 15px 20px;
+        border-radius: 6px;
+        margin-top: 25px;
+        font-size: 13.5px;
+        color: #475569;
+        line-height: 1.6;
+    }
+    .insight-box b { color: #b45309; }
+</style>
+</head>
+<body>
+
+    <div class="chart-card">
+        <div class="header">
+            <h2>Tren Inflasi & Kenaikan UMP (2024 - 2026)</h2>
+            <p>Dampak Ekonomi terhadap Daya Beli & Standar Remunerasi</p>
+        </div>
+        
+        <div class="canvas-container">
+            <canvas id="chartInflasi"></canvas>
+        </div>
+
+        <div class="insight-box">
+            <b>Analisa Singkat:</b> Meskipun Inflasi (garis merah) relatif terkendali di kisaran 2-3%, Kenaikan UMP (garis biru) terus melesat di atas 6% setiap tahunnya. Kesenjangan ini, ditambah dengan beban kerja yang meningkat, menjadi dasar kuat perlunya penyesuaian Tunjangan Kepangkatan & Tunjangan Jabatan bagi unsur pimpinan agar tetap kompetitif.
+        </div>
+    </div>
+
+    <script>
+        const ctx = document.getElementById('chartInflasi').getContext('2d');
+
+        // Data historis dan proyeksi (contoh realistis)
+        const labels = ['Jan 24', 'Jul 24', 'Jan 25', 'Jul 25', 'Jan 26', 'Jul 26', 'Des 26'];
+        
+        const dataInflasi = [2.57, 2.51, 1.57, 1.87, 2.50, 2.80, 3.10]; // Data Inflasi YoY (%)
+        const dataUMP = [3.60, 3.60, 6.50, 6.50, 6.50, 6.50, 6.50]; // Kenaikan UMP (%)
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Inflasi YoY (%)',
+                        data: dataInflasi,
+                        borderColor: '#ef4444', // Merah
+                        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                        borderWidth: 4,
+                        tension: 0.4, // Membuat garis melengkung halus
+                        pointBackgroundColor: '#fff',
+                        pointBorderColor: '#ef4444',
+                        pointBorderWidth: 3,
+                        pointRadius: 5,
+                        pointHoverRadius: 8,
+                        fill: true // Mengisi area di bawah garis
+                    },
+                    {
+                        label: 'Kenaikan UMP (%)',
+                        data: dataUMP,
+                        borderColor: '#3b82f6', // Biru
+                        backgroundColor: 'transparent',
+                        borderWidth: 4,
+                        borderDash: [8, 5], // Garis putus-putus untuk pembeda
+                        tension: 0.4,
+                        pointBackgroundColor: '#fff',
+                        pointBorderColor: '#3b82f6',
+                        pointBorderWidth: 3,
+                        pointRadius: 5,
+                        pointHoverRadius: 8
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            usePointStyle: true,
+                            pointStyle: 'circle',
+                            padding: 25,
+                            font: { size: 13, weight: '600', family: 'Segoe UI' },
+                            color: '#1e293b'
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                        titleFont: { size: 14, family: 'Segoe UI' },
+                        bodyFont: { size: 13, family: 'Segoe UI' },
+                        padding: 15,
+                        cornerRadius: 8,
+                        displayColors: true,
+                        callbacks: {
+                            label: function(context) {
+                                return ' ' + context.dataset.label + ': ' + context.parsed.y.toFixed(2) + '%';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { font: { size: 12, weight: '600' }, color: '#64748b' }
+                    },
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        grid: { color: '#f1f5f9', drawBorder: false },
+                        ticks: {
+                            callback: function(value) { return value + '%'; },
+                            font: { size: 12 },
+                            color: '#64748b'
+                        },
+                        min: 0,
+                        max: 8
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

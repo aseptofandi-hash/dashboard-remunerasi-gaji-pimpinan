@@ -4,84 +4,108 @@
 <meta charset="UTF-8">
 <title>Rekomendasi Manajemen</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
-    body { background-color: #f0f4f8; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 40px; color: #1e293b; }
-    .slide-wrapper { background: #ffffff; border-radius: 16px; padding: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); max-width: 1000px; width: 100%; }
-    .slide-header { border-bottom: 3px solid #10b981; padding-bottom: 15px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: flex-end;}
-    .slide-title { font-size: 26px; font-weight: 800; color: #0f172a; }
-    .slide-subtitle { font-size: 14px; color: #64748b; font-weight: 600; margin-top: 5px; }
-    .badge { padding: 8px 18px; border-radius: 20px; font-size: 14px; font-weight: 800; color: #fff; background: linear-gradient(135deg, #10b981, #047857); box-shadow: 0 4px 10px rgba(0,0,0,0.15);}
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+    body { background-color: #f0f4f8; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 40px; }
+    .slide-card { background: #ffffff; border-radius: 20px; padding: 40px; box-shadow: 0 15px 35px rgba(15, 23, 42, 0.08); width: 100%; max-width: 1100px; }
     
-    .grid-2 { display: grid; grid-template-columns: 1.2fr 1fr; gap: 30px; align-items: center; }
+    /* HEADER */
+    .header { border-bottom: 3px solid #10b981; padding-bottom: 20px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: flex-end; }
+    .header-title { font-size: 28px; font-weight: 800; color: #0f172a; }
+    .header-sub { font-size: 14px; color: #64748b; font-weight: 600; margin-top: 5px; }
+    .badge { padding: 8px 20px; border-radius: 30px; font-size: 14px; font-weight: 800; color: #fff; background: linear-gradient(135deg, #10b981, #047857); }
 
-    .rekomendasi-box { background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 12px; padding: 30px; margin-bottom: 30px; display: flex; gap: 20px; align-items: center; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.1);}
-    .rekomendasi-box .icon { font-size: 50px; }
-    .rekomendasi-box h3 { font-size: 20px; color: #047857; font-weight: 800; margin-bottom: 10px; line-height: 1.4;}
-    .rekomendasi-box p { font-size: 16px; font-weight: 600; color: #065f46; }
+    /* REKOMENDASI BANNER */
+    .rekomendasi-banner { background: linear-gradient(135deg, #ecfdf5, #d1fae5); border: 2px solid #10b981; border-radius: 12px; padding: 25px; display: flex; align-items: center; gap: 20px; margin-bottom: 30px; }
+    .rekomendasi-banner .icon { font-size: 40px; }
+    .rekomendasi-banner h2 { color: #047857; font-size: 20px; font-weight: 800; }
+    .rekomendasi-banner p { color: #065f46; font-size: 15px; font-weight: 600; margin-top: 5px; }
 
-    .reason-list { list-style: none; padding-left: 0; }
-    .reason-list li { position: relative; padding-left: 30px; margin-bottom: 20px; font-size: 14.5px; line-height: 1.6; color: #334155; text-align: justify;}
-    .reason-list li::before { content: '✅'; position: absolute; left: 0; top: 0; font-size: 16px; }
-    .reason-list li b { color: #0f172a; }
+    /* MIDDLE GRID */
+    .middle-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px; align-items: center;}
+    
+    table { width: 100%; border-collapse: collapse; font-size: 14px; border-radius: 8px; overflow: hidden; border: 1px solid #e2e8f0; }
+    th { background: #f8fafc; padding: 15px; border-bottom: 2px solid #e2e8f0; font-weight: 800; color: #475569; text-align: center; }
+    td { padding: 15px; border-bottom: 1px solid #e2e8f0; color: #1e293b; text-align: center; font-weight: 600; }
+    tr:nth-child(even) td { background: #f8fafc; }
+    .row-highlight { background-color: #faf5ff !important; border: 2px solid #a855f7; font-weight: 800; color: #6d28d9; }
 
     .chart-container { position: relative; height: 280px; width: 100%; }
+
+    /* ANALYSIS */
+    .analysis-box { padding: 25px; border-radius: 12px; line-height: 1.7; font-size: 14px; color: #334155; border-left: 6px solid #10b981; background: #ecfdf5; }
+    .analysis-box h3 { font-size: 18px; margin-bottom: 10px; color: #0f172a; font-weight: 800; }
+    .analysis-box p { margin-bottom: 10px; }
+    .analysis-box b { color: #0f172a; }
 </style>
 </head>
 <body>
-    <div class="slide-wrapper">
-        <div class="slide-header">
+    <div class="slide-card">
+        <div class="header">
             <div>
-                <div class="slide-title">Rekomendasi Manajemen</div>
-                <div class="slide-subtitle">Kesimpulan Usulan Penyesuaian Remunerasi Pimpinan</div>
+                <div class="header-title">Rekomendasi Manajemen</div>
+                <div class="header-sub">Kesimpulan Penyesuaian Remunerasi Pimpinan 2026</div>
             </div>
-            <div class="badge">REKOMENDASI</div>
+            <div class="badge">KEPUTUSAN</div>
         </div>
 
-        <div class="rekomendasi-box">
-            <div class="icon">🏆</div>
+        <div class="rekomendasi-banner">
+            <div class="icon">✅</div>
             <div>
-                <h3>MEREKOMENDASIKAN ALTERNATIF 2 (Kenaikan 20% + Penyesuaian Tunjab SM + Rp 1 Juta)</h3>
-                <p>Total Tambahan +/- Rp 461 Juta/bulan (Sudah termasuk penyesuaian SM).</p>
-            </div>
-        </div>
-
-        <div class="grid-2">
-            <div>
-                <ul class="reason-list">
-                    <li><b>Finansial Sehat:</b> Total tambahan +/- Rp 461 Juta/bulan sangat sejalan dan masih jauh di bawah estimasi alokasi anggaran perusahaan sebesar Rp 700 Juta. <i>Cash flow</i> tetap aman.</li>
-                    <li><b>Mitigasi Risiko:</b> Kenaikan 20% ini cukup kompetitif untuk menahan laju <i>turnover</i> di level pimpinan tanpa harus mengorbankan profitabilitas perusahaan.</li>
-                    <li><b>Berkeadilan (Internal Equity):</b> Penyesuaian khusus SM sebesar Rp 1 Juta sangat krusial untuk menyeimbangkan hierarki dan menutup <i>gap</i> yang terlalu jauh antara Area Manager (AMR) dan Senior Manager (SM), serta membedakannya dengan Deputy Area Manager (DAMR).</li>
-                </ul>
-            </div>
-
-            <div>
-                <div class="chart-container">
-                    <canvas id="chartRekomendasi"></canvas>
-                </div>
+                <h2>MEREKOMENDASIKAN ALTERNATIF 2 (Kenaikan 20%)</h2>
+                <p>Memberikan keseimbangan optimal antara peningkatan kesejahteraan dengan stabilitas keuangan perusahaan.</p>
             </div>
         </div>
 
+        <div class="middle-grid">
+            <div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Skenario</th>
+                            <th>Total Tambahan / Bulan <br>(Include SM)</th>
+                            <th>Status Anggaran</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Alt 1 (10%)</td><td>Rp 240,8 Jt</td><td style="color:#059669;">Sangat Aman</td></tr>
+                        <tr class="row-highlight"><td>Alt 2 (20%)</td><td>Rp 461,6 Jt</td><td>Ideal (Rekomendasi)</td></tr>
+                        <tr><td>Alt 3 (30%)</td><td>Rp 682,4 Jt</td><td style="color:#dc2626;">Berisiko</td></tr>
+                    </tbody>
+                </table>
+                <p style="font-size: 12px; color: #64748b; margin-top: 15px; font-style: italic;">*Berdasarkan alokasi anggaran Remunerasi Pimpinan sebesar Rp 700 Juta / Bulan.</p>
+            </div>
+            
+            <div class="chart-container">
+                <canvas id="chart"></canvas>
+            </div>
+        </div>
+
+        <div class="analysis-box">
+            <h3>Poin Pertimbangan Rekomendasi (Alt 2):</h3>
+            <p><b>1. Finansial Sehat:</b> Total tambahan +/- Rp 461,6 Juta/bulan (sudah termasuk penyesuaian SM) sangat sejalan dengan estimasi alokasi anggaran perusahaan (Rp 700 Juta). <i>Cash flow</i> tetap aman.</p>
+            <p><b>2. Mitigasi Risiko:</b> Kenaikan 20% ini cukup kompetitif untuk menahan laju <i>turnover</i> di level pimpinan tanpa harus mengorbankan profitabilitas perusahaan.</p>
+            <p><b>3. Berkeadilan:</b> Penyesuaian khusus SM (Rp 1 Juta) menyeimbangkan hierarki/<i>Gap</i> antara Area Manager dan Senior Manager serta Senior Manager dengan Deputy Area Manager.</p>
+        </div>
     </div>
 
     <script>
-        Chart.defaults.font.family = "'Segoe UI', Arial, sans-serif";
-        const ctx = document.getElementById('chartRekomendasi').getContext('2d');
-        new Chart(ctx, {
+        Chart.defaults.font.family = "'Plus Jakarta Sans', sans-serif";
+        new Chart(document.getElementById('chart').getContext('2d'), {
             type: 'bar',
             data: {
                 labels: ['Alt 1 (10%)', 'Alt 2 (20%)', 'Alt 3 (30%)'],
                 datasets: [{
-                    label: 'Total Tambahan per Bulan (Rp)',
-                    data: [240829382, 461658765, 682488147], // Ditambah SM
+                    data: [240829382, 461658765, 682488147],
                     backgroundColor: ['#3b82f6', '#a855f7', '#f97316'],
-                    borderRadius: 8, borderSkipped: false, barThickness: 50
+                    borderRadius: 8, borderSkipped: false, barThickness: 40
                 }]
             },
             options: {
                 responsive: true, maintainAspectRatio: false,
                 plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(c) { return ' Rp ' + c.parsed.y.toLocaleString('id-ID'); } } } },
-                scales: { y: { grid: { color: '#f1f5f9' }, ticks: { callback: function(v) { return (v / 1000000) + ' Jt'; }, font: {weight: 'bold'} } }, x: { grid: { display: false }, ticks: {font: {weight: 'bold'}} } }
+                scales: { y: { grid: { color: '#f1f5f9' }, ticks: { callback: function(v) { return 'Rp ' + (v / 1000000) + ' Jt'; }, font: {weight: 'bold'} } }, x: { grid: { display: false }, ticks: {font: {weight: 'bold'}} } }
             }
         });
     </script>

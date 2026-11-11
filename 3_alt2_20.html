@@ -4,86 +4,119 @@
 <meta charset="UTF-8">
 <title>Alternatif 2 - Kenaikan 20%</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
-    body { background-color: #f0f4f8; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 40px; color: #1e293b; }
-    .slide-wrapper { background: #ffffff; border-radius: 16px; padding: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); max-width: 1000px; width: 100%; }
-    .slide-header { border-bottom: 3px solid #a855f7; padding-bottom: 15px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: flex-end;}
-    .slide-title { font-size: 26px; font-weight: 800; color: #0f172a; }
-    .slide-subtitle { font-size: 14px; color: #64748b; font-weight: 600; margin-top: 5px; }
-    .badge { padding: 8px 18px; border-radius: 20px; font-size: 14px; font-weight: 800; color: #fff; background: linear-gradient(135deg, #a855f7, #6d28d9); box-shadow: 0 4px 10px rgba(0,0,0,0.15);}
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+    body { background-color: #f0f4f8; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 40px; }
+    .slide-card { background: #ffffff; border-radius: 20px; padding: 40px; box-shadow: 0 15px 35px rgba(15, 23, 42, 0.08); width: 100%; max-width: 1100px; }
     
+    /* HEADER */
+    .header { border-bottom: 3px solid #a855f7; padding-bottom: 20px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: flex-end; }
+    .header-title { font-size: 28px; font-weight: 800; color: #0f172a; }
+    .header-sub { font-size: 14px; color: #64748b; font-weight: 600; margin-top: 5px; }
+    .badge { padding: 8px 20px; border-radius: 30px; font-size: 14px; font-weight: 800; color: #fff; background: linear-gradient(135deg, #a855f7, #6d28d9); }
+
+    /* KPI GRID */
     .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px; }
-    .kpi-card { border-radius: 12px; padding: 20px; color: #fff; display: flex; flex-direction: column; justify-content: center; box-shadow: 0 5px 15px rgba(0,0,0,0.1); position: relative; overflow: hidden; }
-    .kpi-card::after { content: ''; position: absolute; right: -10px; bottom: -10px; width: 60px; height: 60px; background: rgba(255,255,255,0.15); border-radius: 50%; }
+    .kpi-card { border-radius: 12px; padding: 20px; color: #fff; box-shadow: 0 5px 15px rgba(0,0,0,0.1); display: flex; flex-direction: column; justify-content: center; }
+    .bg-dark { background: linear-gradient(135deg, #334155, #1e293b); }
     .bg-purple { background: linear-gradient(135deg, #a855f7, #7e22ce); }
     .bg-teal { background: linear-gradient(135deg, #14b8a6, #0f766e); }
-    .bg-yellow { background: linear-gradient(135deg, #f59e0b, #d97706); }
     .bg-green { background: linear-gradient(135deg, #10b981, #059669); }
     .kpi-card .label { font-size: 11px; text-transform: uppercase; font-weight: 700; opacity: 0.9; margin-bottom: 5px; }
-    .kpi-card .value { font-size: 20px; font-weight: 800; margin-bottom: 5px; }
+    .kpi-card .value { font-size: 22px; font-weight: 800; margin-bottom: 5px; }
     .kpi-card .desc { font-size: 11px; opacity: 0.8; }
 
-    .chart-container { position: relative; height: 350px; width: 100%; margin-bottom: 25px; }
-    .highlight-box { background: #faf5ff; border-left: 6px solid #a855f7; padding: 20px; border-radius: 8px; font-size: 14px; line-height: 1.6; color: #475569; }
+    /* MIDDLE GRID */
+    .middle-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 30px; margin-bottom: 30px; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; border-radius: 8px; overflow: hidden; border: 1px solid #e2e8f0; }
+    th { background: #f8fafc; padding: 15px; border-bottom: 2px solid #e2e8f0; font-weight: 800; color: #475569; text-align: center; }
+    td { padding: 15px; border-bottom: 1px solid #e2e8f0; color: #1e293b; text-align: center; font-weight: 600; }
+    tr:nth-child(even) td { background: #f8fafc; }
+    .row-highlight { background-color: #faf5ff !important; font-weight: 800; color: #6d28d9; }
+    .chart-container { position: relative; height: 280px; width: 100%; }
+
+    /* ANALYSIS */
+    .analysis-box { padding: 25px; border-radius: 12px; line-height: 1.7; font-size: 14px; color: #334155; border-left: 6px solid #a855f7; background: #faf5ff; }
+    .analysis-box h3 { font-size: 18px; margin-bottom: 10px; color: #0f172a; font-weight: 800; }
+    .analysis-box b { color: #0f172a; }
 </style>
 </head>
 <body>
-    <div class="slide-wrapper">
-        <div class="slide-header">
+    <div class="slide-card">
+        <div class="header">
             <div>
-                <div class="slide-title">Simulasi Alternatif 2: Kenaikan 20%</div>
-                <div class="slide-subtitle">Pendekatan Moderat (Keseimbangan Kinerja & Beban Biaya)</div>
+                <div class="header-title">Analisa Dampak Finansial: Alternatif 2</div>
+                <div class="header-sub">Kenaikan 20% Tj. Kepangkatan & Jabatan + Penyesuaian SM</div>
             </div>
             <div class="badge">SKENARIO 20%</div>
         </div>
 
         <div class="kpi-grid">
-            <div class="kpi-card bg-purple">
-                <div class="label">Total Gaji (Before)</div>
+            <div class="kpi-card bg-dark">
+                <div class="label">Gaji Before</div>
                 <div class="value">Rp 5,13 M</div>
             </div>
-            <div class="kpi-card bg-teal">
-                <div class="label">Kenaikan Tunj. (20%)</div>
+            <div class="kpi-card bg-purple">
+                <div class="label">Kenaikan 20%</div>
                 <div class="value">Rp 441,6 Jt</div>
             </div>
-            <div class="kpi-card bg-yellow">
+            <div class="kpi-card bg-teal">
                 <div class="label">Penyesuaian SM</div>
                 <div class="value">Rp 20 Jt</div>
             </div>
             <div class="kpi-card bg-green">
-                <div class="label">Total Gaji (After)</div>
-                <div class="value">Rp 5,60 M</div>
-                <div class="desc">+/- Rp 461,6 Jt / Bulan</div>
+                <div class="label">Total Tambahan</div>
+                <div class="value">Rp 461,6 Jt</div>
+                <div class="desc">Per Bulan (Rp 5,53 M / Thn)</div>
             </div>
         </div>
 
-        <div class="chart-container">
-            <canvas id="chartAlt2"></canvas>
+        <div class="middle-grid">
+            <div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Komponen Biaya</th>
+                            <th>Nominal (Rp)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Gaji (Before)</td><td>5.139.097.815</td></tr>
+                        <tr><td>Kenaikan Murni 20% (Excel)</td><td>441.658.765</td></tr>
+                        <tr><td>Penyesuaian Tunjab SM</td><td>20.000.000</td></tr>
+                        <tr class="row-highlight"><td>Total Tambahan / Bulan</td><td>461.658.765</td></tr>
+                        <tr><td>Gaji (After)</td><td>5.600.756.580</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="chart-container">
+                <canvas id="chart"></canvas>
+            </div>
         </div>
 
-        <div class="highlight-box">
-            <b>Analisa:</b> Total tambahan beban bulanan adalah <b>Rp 461,6 Juta</b> (Termasuk SM). Angka ini sangat ideal, masih di bawah alokasi anggaran (Rp 700 Juta), dan memberikan kenaikan yang cukup signifikan untuk retensi pimpinan.
+        <div class="analysis-box">
+            <h3>Analisa Dampak Finansial</h3>
+            <p>Skenario ini menyerap <b>Rp 461,6 Juta/bulan</b> (sekitar 66% dari alokasi anggaran Rp 700 Juta). Ini adalah <b>titik keseimbangan (sweet spot) yang ideal</b>. Perusahaan masih memiliki sisa buffer anggaran yang aman, namun kenaikan ini sudah cukup signifikan dan kompetitif untuk mengamankan talenta pimpinan.</p>
         </div>
     </div>
 
     <script>
-        Chart.defaults.font.family = "'Segoe UI', Arial, sans-serif";
-        const ctx = document.getElementById('chartAlt2').getContext('2d');
-        new Chart(ctx, {
+        Chart.defaults.font.family = "'Plus Jakarta Sans', sans-serif";
+        new Chart(document.getElementById('chart').getContext('2d'), {
             type: 'bar',
             data: {
-                labels: ['Gaji Before', 'Kenaikan Alt', 'Penyesuaian SM', 'Gaji After'],
+                labels: ['Gaji Before', 'Gaji After'],
                 datasets: [{
-                    data: [5139097815, 441658765, 20000000, 5600756580],
-                    backgroundColor: ['#d8b4fe', '#34d399', '#fbbf24', '#f472b6'],
+                    data: [5139097815, 5600756580],
+                    backgroundColor: ['#94a3b8', '#a855f7'],
                     borderRadius: 8, borderSkipped: false, barThickness: 60
                 }]
             },
             options: {
                 responsive: true, maintainAspectRatio: false,
                 plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(c) { return ' Rp ' + c.parsed.y.toLocaleString('id-ID'); } } } },
-                scales: { y: { grid: { color: '#f1f5f9' }, ticks: { callback: function(v) { return (v / 1000000000).toFixed(1) + ' M'; }, font: {weight: 'bold'} } }, x: { grid: { display: false }, ticks: {font: {weight: 'bold'}} } }
+                scales: { y: { grid: { color: '#f1f5f9' }, ticks: { callback: function(v) { return 'Rp ' + (v / 1000000000).toFixed(1) + ' M'; }, font: {weight: 'bold'} } }, x: { grid: { display: false }, ticks: {font: {weight: 'bold'}} } }
             }
         });
     </script>

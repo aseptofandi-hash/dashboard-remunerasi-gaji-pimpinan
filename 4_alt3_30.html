@@ -4,86 +4,119 @@
 <meta charset="UTF-8">
 <title>Alternatif 3 - Kenaikan 30%</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
-    body { background-color: #f0f4f8; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 40px; color: #1e293b; }
-    .slide-wrapper { background: #ffffff; border-radius: 16px; padding: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); max-width: 1000px; width: 100%; }
-    .slide-header { border-bottom: 3px solid #f97316; padding-bottom: 15px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: flex-end;}
-    .slide-title { font-size: 26px; font-weight: 800; color: #0f172a; }
-    .slide-subtitle { font-size: 14px; color: #64748b; font-weight: 600; margin-top: 5px; }
-    .badge { padding: 8px 18px; border-radius: 20px; font-size: 14px; font-weight: 800; color: #fff; background: linear-gradient(135deg, #f97316, #c2410c); box-shadow: 0 4px 10px rgba(0,0,0,0.15);}
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+    body { background-color: #f0f4f8; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 40px; }
+    .slide-card { background: #ffffff; border-radius: 20px; padding: 40px; box-shadow: 0 15px 35px rgba(15, 23, 42, 0.08); width: 100%; max-width: 1100px; }
     
+    /* HEADER */
+    .header { border-bottom: 3px solid #f97316; padding-bottom: 20px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: flex-end; }
+    .header-title { font-size: 28px; font-weight: 800; color: #0f172a; }
+    .header-sub { font-size: 14px; color: #64748b; font-weight: 600; margin-top: 5px; }
+    .badge { padding: 8px 20px; border-radius: 30px; font-size: 14px; font-weight: 800; color: #fff; background: linear-gradient(135deg, #f97316, #c2410c); }
+
+    /* KPI GRID */
     .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px; }
-    .kpi-card { border-radius: 12px; padding: 20px; color: #fff; display: flex; flex-direction: column; justify-content: center; box-shadow: 0 5px 15px rgba(0,0,0,0.1); position: relative; overflow: hidden; }
-    .kpi-card::after { content: ''; position: absolute; right: -10px; bottom: -10px; width: 60px; height: 60px; background: rgba(255,255,255,0.15); border-radius: 50%; }
+    .kpi-card { border-radius: 12px; padding: 20px; color: #fff; box-shadow: 0 5px 15px rgba(0,0,0,0.1); display: flex; flex-direction: column; justify-content: center; }
+    .bg-dark { background: linear-gradient(135deg, #334155, #1e293b); }
     .bg-orange { background: linear-gradient(135deg, #f97316, #ea580c); }
     .bg-teal { background: linear-gradient(135deg, #14b8a6, #0f766e); }
-    .bg-yellow { background: linear-gradient(135deg, #f59e0b, #d97706); }
-    .bg-green { background: linear-gradient(135deg, #10b981, #059669); }
+    .bg-red { background: linear-gradient(135deg, #ef4444, #b91c1c); }
     .kpi-card .label { font-size: 11px; text-transform: uppercase; font-weight: 700; opacity: 0.9; margin-bottom: 5px; }
-    .kpi-card .value { font-size: 20px; font-weight: 800; margin-bottom: 5px; }
+    .kpi-card .value { font-size: 22px; font-weight: 800; margin-bottom: 5px; }
     .kpi-card .desc { font-size: 11px; opacity: 0.8; }
 
-    .chart-container { position: relative; height: 350px; width: 100%; margin-bottom: 25px; }
-    .highlight-box { background: #fff7ed; border-left: 6px solid #f97316; padding: 20px; border-radius: 8px; font-size: 14px; line-height: 1.6; color: #475569; }
+    /* MIDDLE GRID */
+    .middle-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 30px; margin-bottom: 30px; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; border-radius: 8px; overflow: hidden; border: 1px solid #e2e8f0; }
+    th { background: #f8fafc; padding: 15px; border-bottom: 2px solid #e2e8f0; font-weight: 800; color: #475569; text-align: center; }
+    td { padding: 15px; border-bottom: 1px solid #e2e8f0; color: #1e293b; text-align: center; font-weight: 600; }
+    tr:nth-child(even) td { background: #f8fafc; }
+    .row-highlight { background-color: #fff7ed !important; font-weight: 800; color: #c2410c; }
+    .chart-container { position: relative; height: 280px; width: 100%; }
+
+    /* ANALYSIS */
+    .analysis-box { padding: 25px; border-radius: 12px; line-height: 1.7; font-size: 14px; color: #334155; border-left: 6px solid #ef4444; background: #fef2f2; }
+    .analysis-box h3 { font-size: 18px; margin-bottom: 10px; color: #b91c1c; font-weight: 800; }
+    .analysis-box b { color: #0f172a; }
 </style>
 </head>
 <body>
-    <div class="slide-wrapper">
-        <div class="slide-header">
+    <div class="slide-card">
+        <div class="header">
             <div>
-                <div class="slide-title">Simulasi Alternatif 3: Kenaikan 30%</div>
-                <div class="slide-subtitle">Pendekatan Agresif (Fokus pada Daya Saing Ekstrem)</div>
+                <div class="header-title">Analisa Dampak Finansial: Alternatif 3</div>
+                <div class="header-sub">Kenaikan 30% Tj. Kepangkatan & Jabatan + Penyesuaian SM</div>
             </div>
             <div class="badge">SKENARIO 30%</div>
         </div>
 
         <div class="kpi-grid">
-            <div class="kpi-card bg-orange">
-                <div class="label">Total Gaji (Before)</div>
+            <div class="kpi-card bg-dark">
+                <div class="label">Gaji Before</div>
                 <div class="value">Rp 5,13 M</div>
             </div>
-            <div class="kpi-card bg-teal">
-                <div class="label">Kenaikan Tunj. (30%)</div>
+            <div class="kpi-card bg-orange">
+                <div class="label">Kenaikan 30%</div>
                 <div class="value">Rp 662,4 Jt</div>
             </div>
-            <div class="kpi-card bg-yellow">
+            <div class="kpi-card bg-teal">
                 <div class="label">Penyesuaian SM</div>
                 <div class="value">Rp 20 Jt</div>
             </div>
-            <div class="kpi-card bg-green">
-                <div class="label">Total Gaji (After)</div>
-                <div class="value">Rp 5,82 M</div>
-                <div class="desc">+/- Rp 682,4 Jt / Bulan</div>
+            <div class="kpi-card bg-red">
+                <div class="label">Total Tambahan</div>
+                <div class="value">Rp 682,4 Jt</div>
+                <div class="desc">Per Bulan (Rp 8,18 M / Thn)</div>
             </div>
         </div>
 
-        <div class="chart-container">
-            <canvas id="chartAlt3"></canvas>
+        <div class="middle-grid">
+            <div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Komponen Biaya</th>
+                            <th>Nominal (Rp)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Gaji (Before)</td><td>5.139.097.815</td></tr>
+                        <tr><td>Kenaikan Murni 30% (Excel)</td><td>662.488.147</td></tr>
+                        <tr><td>Penyesuaian Tunjab SM</td><td>20.000.000</td></tr>
+                        <tr class="row-highlight"><td>Total Tambahan / Bulan</td><td>682.488.147</td></tr>
+                        <tr><td>Gaji (After)</td><td>5.821.585.962</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="chart-container">
+                <canvas id="chart"></canvas>
+            </div>
         </div>
 
-        <div class="highlight-box">
-            <b>Analisa:</b> Total tambahan beban bulanan adalah <b>Rp 682,4 Juta</b> (Termasuk SM). Angka ini sudah sangat mepet dengan batas maksimal alokasi anggaran dan berisiko menekan profitabilitas jika tidak diimbangi lonjakan revenue.
+        <div class="analysis-box">
+            <h3>Analisa Dampak Finansial</h3>
+            <p>Skenario ini menyerap <b>Rp 682,4 Juta/bulan</b> (sekitar 97% dari alokasi anggaran Rp 700 Juta). Beban ini <b>sangat agresif dan berisiko</b>. Hampir seluruh ruang anggaran habis, sehingga tidak ada ruang fiskal jika terjadi lonjakan biaya operasional lain.</p>
         </div>
     </div>
 
     <script>
-        Chart.defaults.font.family = "'Segoe UI', Arial, sans-serif";
-        const ctx = document.getElementById('chartAlt3').getContext('2d');
-        new Chart(ctx, {
+        Chart.defaults.font.family = "'Plus Jakarta Sans', sans-serif";
+        new Chart(document.getElementById('chart').getContext('2d'), {
             type: 'bar',
             data: {
-                labels: ['Gaji Before', 'Kenaikan Alt', 'Penyesuaian SM', 'Gaji After'],
+                labels: ['Gaji Before', 'Gaji After'],
                 datasets: [{
-                    data: [5139097815, 662488147, 20000000, 5821585962],
-                    backgroundColor: ['#fdba74', '#34d399', '#fbbf24', '#f472b6'],
+                    data: [5139097815, 5821585962],
+                    backgroundColor: ['#94a3b8', '#f97316'],
                     borderRadius: 8, borderSkipped: false, barThickness: 60
                 }]
             },
             options: {
                 responsive: true, maintainAspectRatio: false,
                 plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(c) { return ' Rp ' + c.parsed.y.toLocaleString('id-ID'); } } } },
-                scales: { y: { grid: { color: '#f1f5f9' }, ticks: { callback: function(v) { return (v / 1000000000).toFixed(1) + ' M'; }, font: {weight: 'bold'} } }, x: { grid: { display: false }, ticks: {font: {weight: 'bold'}} } }
+                scales: { y: { grid: { color: '#f1f5f9' }, ticks: { callback: function(v) { return 'Rp ' + (v / 1000000000).toFixed(1) + ' M'; }, font: {weight: 'bold'} } }, x: { grid: { display: false }, ticks: {font: {weight: 'bold'}} } }
             }
         });
     </script>
